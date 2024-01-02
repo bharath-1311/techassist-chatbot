@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: techassist-chatbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: techassist-chatbot
+  template:
+    metadata:
+      labels:
+        app: techassist-chatbot
+    spec:
+      containers:
+      - name: techassist-chatbot
+        image: gcr.io/lumen-b-ctl-047/techassist-chatbot:11.0
+        ports:
+        - containerPort: 8765
