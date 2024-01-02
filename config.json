@@ -1,0 +1,7 @@
+{
+    "GOOGLE_APPLICATION_CREDENTIALS" : "lumen-b-ctl-047-5976514b2448.json",
+    "HUGGINGFACEHUB_API_TOKEN" : "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",
+    "repo_id": "mistralai/Mixtral-8x7B-Instruct-v0.1",
+    "bucket" : "techassist-chatbot",
+    "blob" : "tech-docs.pdf"
+}
