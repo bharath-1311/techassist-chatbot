@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM gcr.io/lumen-b-ctl-047/techassist-chatbot:16.0
 
 # Set the working directory to /app
 
