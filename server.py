@@ -9,8 +9,11 @@ from langchain.vectorstores import FAISS
 from langchain.chains import ConversationalRetrievalChain
 from langchain.callbacks.manager import CallbackManager
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from sentence_transformers import SentenceTransformer
+#from sentence_transformers import SentenceTransformer
 from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.llms import HuggingFaceHub
+from langchain.llms import OpenAI
+from langchain.embeddings import OpenAIEmbeddings
 import os
 from google.cloud.storage import Client
 from PyPDF2 import PdfReader
@@ -27,7 +30,7 @@ with open('static_qa.json') as g:
     static_qa = json.load(g)
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = config['GOOGLE_APPLICATION_CREDENTIALS']
-
+os.environ['OPENAI_API_KEY'] = config['OPENAI_API_KEY']
 
 def replace_words(text, replacements):
     for word, replacement in replacements.items():
@@ -35,11 +38,9 @@ def replace_words(text, replacements):
     return text
 
 
-
-from langchain.llms import HuggingFaceHub
-os.environ['HUGGINGFACEHUB_API_TOKEN'] = config["HUGGINGFACEHUB_API_TOKEN"]
-repo_id = config["repo_id"]
-llm = HuggingFaceHub(repo_id=repo_id, model_kwargs={"temperature": 0.5, "max_length": 5000})
+#os.environ['HUGGINGFACEHUB_API_TOKEN'] = config["HUGGINGFACEHUB_API_TOKEN"]
+# repo_id = config["repo_id"]
+# llm = HuggingFaceHub(repo_id=repo_id, model_kwargs={"temperature": 0.5, "max_length": 5000})
 
 
 
@@ -50,7 +51,10 @@ content = blob.download_as_string()
 pdf_stream = io.BytesIO(content)
 pdfreader = PdfReader(pdf_stream)
 
-raw_text = "You are a helpful chatbot for helping technicians overcome issues. Assist me with all the numbered steps based the info provided."
+raw_text ='''You are a helpful chatbot for helping technicians overcome issues. Assist me with all the numbered steps based the info provided. when asked, tell the complete details as follows
+The jobs for the technician for today are:
+1. Install order for Jacob Buchheim: Contact: 224-234-4781 Job Type: Install Host ID: W777395 Circuit ID: W777395.
+2. Repair order for Jude Bellingham: Contact: 258-765-2497 Job Type: MMRC Host ID: W707953 Circuit ID: W707953.'''
 for i, page in enumerate(pdfreader.pages):
     content = page.extract_text()
     if content:
@@ -68,10 +72,11 @@ text_splitter = CharacterTextSplitter(
 )
 
 texts = text_splitter.split_text(raw_text)
-embeddings=HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2')
+#embeddings=HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2')
+embeddings = OpenAIEmbeddings()
 faiss_index = FAISS.from_texts(texts, embeddings)
 
-qa_chain = load_qa_chain(llm=llm, chain_type="stuff")
+qa_chain = load_qa_chain(llm=OpenAI(), chain_type="stuff", )
 chat_history = []
 
 

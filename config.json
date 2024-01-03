@@ -1,5 +1,6 @@
 {
     "GOOGLE_APPLICATION_CREDENTIALS" : "lumen-b-ctl-047-5976514b2448.json",
+    "OPENAI_API_KEY" : "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",
     "HUGGINGFACEHUB_API_TOKEN" : "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",
     "repo_id": "mistralai/Mixtral-8x7B-Instruct-v0.1",
     "bucket" : "techassist-chatbot",
